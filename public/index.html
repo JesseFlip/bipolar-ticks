@@ -14,7 +14,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
     <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
 
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -49,7 +49,7 @@
 <body>
     <div id="root"></div>
 
-    <script type="text/babel" data-presets="react,stage-3">
+    <script type="text/plain" id="app-source">
         const { useState, useEffect, useRef, useCallback } = React;
 
         /* ------------------------------------------------------------------ */
@@ -901,6 +901,26 @@
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
+    </script>
+    <script>
+        // Manually invoke Babel Standalone instead of relying on its
+        // type="text/babel" auto-scan: that auto-scan uses the "react"
+        // preset's default runtime, which recent Babel versions default to
+        // "automatic" (emits `import ... from "react/jsx-runtime"`). This
+        // page has no bundler/import map, so that import throws and the
+        // app never mounts. Forcing the classic runtime compiles JSX to
+        // React.createElement(...) calls against the global React/ReactDOM
+        // UMD builds loaded above.
+        (function () {
+            var source = document.getElementById('app-source').textContent;
+            var output = Babel.transform(source, {
+                presets: [['react', { runtime: 'classic' }]],
+                filename: 'app.jsx'
+            }).code;
+            var script = document.createElement('script');
+            script.text = output;
+            document.head.appendChild(script);
+        })();
     </script>
 </body>
 </html>

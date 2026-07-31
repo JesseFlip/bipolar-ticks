@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Citizen's Blueprint: From Advocacy to Action</title>
-    
+    <meta name="description" content="A step-by-step roadmap to understanding the hemp policy fight in Texas, taking action, finding your role, and getting paid to make a real difference.">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    
+
     <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
@@ -23,13 +24,37 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         .step-transition { transition: all 0.3s ease-in-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-track {
+            animation: marquee 45s linear infinite;
+        }
+        .marquee-wrap:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
     </style>
 </head>
 <body>
     <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState } = React;
+    <script type="text/babel" data-presets="react,stage-3">
+        const { useState, useEffect, useRef, useCallback } = React;
+
+        /* ------------------------------------------------------------------ */
+        /* Data                                                                */
+        /* ------------------------------------------------------------------ */
 
         const roadmapSteps = [
             {
@@ -38,7 +63,18 @@
                 subtitle: "Understanding the 'Why' behind the bans.",
                 category: "Perspective",
                 content: "The recent push against hemp isn't about public safety; it's about market control. The alcohol industry and large multi-state corporate marijuana operators are lobbying hard to crush independent hemp because it threatens their profits. They use 'protecting kids' as a shield. Meanwhile, significantly more toxic and addictive substances like alcohol, sugar, and caffeine remain completely normalized and aggressively marketed.",
+                keyPoints: [
+                    "Follow the money: check who is funding the legislators pushing the ban, not just what they're saying on camera.",
+                    "Compare the actual toxicity and overdose data for alcohol versus hemp-derived products — the numbers rarely match the rhetoric.",
+                    "Notice which industries show up to testify against hemp. It's rarely parents' groups leading the charge; it's competitors.",
+                    "Regulation and prohibition are not the same fight. You can support child-safety packaging and age limits while opposing an outright ban."
+                ],
                 action: "When debating this, call out the hypocrisy. Focus on the financial motivations (follow the money to political donors) and the biological reality of toxicity rather than just arguing 'weed should be legal'.",
+                nextSteps: [
+                    "Pull public campaign finance filings for the bill's sponsors and see who's donating.",
+                    "Build a one-page 'toxicity comparison' fact sheet you can share in five minutes.",
+                    "Practice the pitch on a skeptical friend before you take it to a stranger or a rep's office."
+                ],
                 icon: (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                 )
@@ -49,7 +85,18 @@
                 subtitle: "Taking immediate action as a citizen.",
                 category: "Activism",
                 content: "Before you can run the system, you have to push back against it. State agencies like the DSHS take orders from the Texas Legislature (specifically leaders like Dan Patrick). The real battleground for hemp is the upcoming 2027 legislative session, but the groundwork and lawsuits start right now.",
+                keyPoints: [
+                    "Agencies implement policy; they rarely originate it. Pressure works best when it's aimed at the legislators who set the mandate.",
+                    "Interim committee hearings between sessions are where a lot of the real groundwork happens — and where public attendance is thinnest.",
+                    "Local, compliant hemp retailers are often the first ones hurt and the most motivated allies you'll find.",
+                    "A single well-organized call campaign to a district office can outweigh hundreds of form emails."
+                ],
                 action: "Use Texas's 'Who Represents Me?' tool to find your specific Dallas/Plano state reps. Call their offices directly—do not just email. Support the Texas Hemp Business Council (THBC) and spend money at local, compliant shops to fund their legal defense.",
+                nextSteps: [
+                    "Look up your state house and senate district and save both office numbers in your phone.",
+                    "Write a 30-second call script: who you are, where you live, what you want, and why.",
+                    "Ask your local hemp shop if they're part of a coalition or legal defense fund you can support directly."
+                ],
                 icon: (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
                 )
@@ -60,7 +107,18 @@
                 subtitle: "Getting your foot in the political door.",
                 category: "Career",
                 content: "If you are tired of uninformed people running things, you have to get inside. Political campaigns desperately need capable people, but they hire who they know and trust. The easiest way in is proving you can handle the chaotic environment of a campaign.",
+                keyPoints: [
+                    "Campaigns run on trust built under pressure, not resumes. Showing up consistently for six weeks beats a polished LinkedIn profile.",
+                    "Election worker roles are paid, nonpartisan, and a legitimate way to learn how the machinery actually works.",
+                    "Local and county party offices are chronically understaffed and a low-friction entry point.",
+                    "Every campaign has more work than people. Ask what's not getting done, and volunteer for that specifically."
+                ],
                 action: "Start as a highly targeted volunteer or apply to be a paid Texas Election Worker. Be upfront with campaign managers: tell them you are looking for a paid role. Prove your worth by showing up consistently and organizing efficiently.",
+                nextSteps: [
+                    "Identify one local race or advocacy org and email the campaign manager or director directly.",
+                    "Offer a specific, scoped task in your first message (e.g. 'I can build you a volunteer sign-up tracker').",
+                    "Track every commitment you make and hit every one of them — reliability is the entire audition."
+                ],
                 icon: (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 )
@@ -71,7 +129,18 @@
                 subtitle: "Leveraging your AWS and Dev skills.",
                 category: "Career",
                 content: "This is your superpower and how you skip the line. You have AWS, Python, FastAPI, and React skills. Political campaigns generate massive amounts of voter data (polling, donor lists, canvassing routes) but often lack the in-house tech talent to manage it.",
+                keyPoints: [
+                    "Most campaigns run on spreadsheets and duct tape until someone technical shows up and fixes it.",
+                    "Voter file management, canvassing route optimization, and donor dashboards are all real, billable problems.",
+                    "A small working demo (even a fake-data prototype) is worth more than a description of your skills.",
+                    "This is one of the few campaign roles where you can work partly remote and still be indispensable."
+                ],
                 action: "Pitch yourself as a Digital/Data Coordinator. Offer to automate their voter outreach data pipelines using Python, or build internal tracking dashboards using React and AWS. This is highly specialized, highly valued, and well-paid campaign work.",
+                nextSteps: [
+                    "Build a small demo dashboard with fake data that shows canvassing progress or donor totals.",
+                    "Write a two-sentence pitch: the problem you solve, and the tool you'll use to solve it.",
+                    "Send that pitch to a campaign, PAC, or advocacy nonprofit that's already lobbying on hemp policy."
+                ],
                 icon: (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
                 )
@@ -82,113 +151,756 @@
                 subtitle: "Securing the bag in Texas politics.",
                 category: "Income",
                 content: "Once you have the network or the tech portfolio ready to show, it's time to apply for the real checks. The political industry has its own ecosystem for hiring; standard job boards won't cut it.",
+                keyPoints: [
+                    "Political hiring moves in cycles tied to the election calendar — start looking months before filing deadlines, not after.",
+                    "Titles vary wildly between orgs; read the job description, not just the title, to find tech-adjacent roles.",
+                    "Advocacy nonprofits and trade associations (not just campaigns) hire for exactly these data and organizing skills year-round.",
+                    "Contract and part-time work is common early on — treat it as a portfolio-builder, not a dead end."
+                ],
                 action: "Check 'Texas Political Jobs', 'Daybook' (filter for Austin/Dallas), and 'Arena Careers'. Look for job titles like 'Deputy Data Director', 'Digital Organizer', 'Field Coordinator', or 'Legislative Aide'.",
+                nextSteps: [
+                    "Set a weekly reminder to check political job boards during session years — postings move fast.",
+                    "Tailor one resume specifically to 'data + organizing' roles, leading with tools, not job titles.",
+                    "Ask everyone from Step 3 and Step 6 if they know of open roles — most campaign hires happen by referral."
+                ],
                 icon: (
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                )
+            },
+            {
+                id: 6,
+                title: "Building Your Coalition",
+                subtitle: "Nobody wins this fight alone.",
+                category: "Community",
+                content: "Bans like this succeed when the people affected stay isolated from each other. A single shop owner or single patient is easy to ignore; a coordinated coalition of shop owners, patients, veterans, and farmers is not. Your job at this stage is to connect dots that aren't connected yet.",
+                keyPoints: [
+                    "Hemp shop owners and employees are losing their livelihoods and are often the most motivated, best-informed advocates you can find.",
+                    "Veterans' groups and patients who rely on hemp-derived products for pain or anxiety management bring credibility that pure policy arguments can't.",
+                    "Farmers whose crops depend on a legal hemp market are a powerful, often-overlooked voice with rural legislators.",
+                    "Coalitions amplify reach: one email list becomes five, one call-in day becomes a wave."
+                ],
+                action: "Introduce yourself to the people already fighting this fight — shop owners, THBC members, patient advocacy groups — and ask how you can plug in rather than starting something new from scratch.",
+                nextSteps: [
+                    "Visit a local hemp retailer, introduce yourself, and ask who else is organizing locally.",
+                    "Offer your tech skills to whatever coalition you find — most are volunteer-run and desperate for basic tooling.",
+                    "Cross-post calls to action across every group you're part of instead of just your own network."
+                ],
+                icon: (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4zm6 0a4 4 0 10-4-4"></path></svg>
+                )
+            },
+            {
+                id: 7,
+                title: "Playing the Long Game",
+                subtitle: "The 2027 legislative session is the real fight.",
+                category: "Strategy",
+                content: "Texas's legislature only meets in regular session every two years, which means the 2027 session is where this actually gets decided. Everything you do now — organizing, coalition-building, career positioning — is groundwork for showing up prepared when it matters most.",
+                keyPoints: [
+                    "Interim charges and committee hearings between sessions are where bill language actually gets shaped — track them, not just session headlines.",
+                    "Testifying at a public hearing, even for two minutes, becomes part of the official record and can be cited later.",
+                    "Legislative aides, not just legislators, are often the fastest way to understand where a bill really stands.",
+                    "Bills die in committee far more often than on the floor — early-session pressure matters more than late-session panic."
+                ],
+                action: "Start tracking the bill tracker on the Texas Legislature's public website now, learn the committee structure, and build relationships with legislative aides before the session starts, not during it.",
+                nextSteps: [
+                    "Bookmark the official Texas Legislature bill-tracking tools and check them monthly, not just during session.",
+                    "Learn which committee hemp bills typically get assigned to and who sits on it.",
+                    "Draft written testimony now so you're ready to submit or deliver it the moment a hearing is scheduled."
+                ],
+                icon: (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 )
             }
         ];
 
-        const App = () => {
-            const [activeStep, setActiveStep] = useState(1);
+        const faqItems = [
+            {
+                q: "What's the actual difference between hemp and marijuana?",
+                a: "Legally, both are the same plant species (Cannabis sativa). The distinction is the concentration of THC — hemp is defined by law as containing very low THC levels, while marijuana is defined as exceeding that threshold. The 'hemp' products caught up in these bans are typically hemp-derived items (like delta-8) that use a legal loophole around that definition."
+            },
+            {
+                q: "What is the DSHS and why does it matter here?",
+                a: "The Texas Department of State Health Services is the state agency responsible for implementing rules the Legislature passes, including hemp product regulation. Agencies enforce policy — they don't usually originate it — which is why sustained pressure is most effective when aimed at the legislators who set the mandate, not just the agency carrying it out."
+            },
+            {
+                q: "Why does the alcohol industry care about hemp?",
+                a: "Hemp-derived THC products compete directly with alcohol for the same 'unwind and relax' consumer moment. Industry lobbying disclosures are public record — following campaign donations and lobbying filings tied to hemp legislation is one of the clearest ways to see who's funding a given bill."
+            },
+            {
+                q: "Is regulation the same thing as a ban?",
+                a: "No, and conflating the two weakens your argument. Age verification, potency limits, and lab-testing requirements are regulation. Removing a legal product category from the market entirely is prohibition. You can support the former while opposing the latter — and most people, including undecided legislators, find that a much more persuasive position than an all-or-nothing stance."
+            },
+            {
+                q: "What does 'interim session' mean?",
+                a: "Texas's Legislature meets in regular session for about five months every odd-numbered year. The rest of the time is the 'interim,' when committees hold hearings, study issues, and shape the bills that get formally filed once the next session opens. Most of the real groundwork for 2027 happens during this quieter interim period."
+            },
+            {
+                q: "I don't live in Texas — can I still help?",
+                a: "Yes. Similar hemp-regulation fights are playing out in statehouses across the country, and the research, coalition-building, and technology-donation playbook here transfers directly. Adapt the specifics (your own state legislature, your own local shops and advocacy groups) and the same roadmap applies."
+            }
+        ];
+
+        const QUIZ_QUESTIONS = [
+            {
+                prompt: "When your friends need something explained clearly, you're usually the one who...",
+                options: [
+                    { label: "Breaks it into a simple step-by-step system", tag: "organize" },
+                    { label: "Writes it up so it actually makes sense on paper", tag: "write" },
+                    { label: "Makes a chart or slide to show it visually", tag: "design" },
+                    { label: "Builds a tool so nobody has to ask again", tag: "tech" }
+                ]
+            },
+            {
+                prompt: "Pick the project you'd actually enjoy this weekend:",
+                options: [
+                    { label: "Knocking doors or making calls to rally people", tag: "organize" },
+                    { label: "Drafting a persuasive post or op-ed", tag: "comms" },
+                    { label: "Building a spreadsheet or dashboard that tracks something", tag: "tech" },
+                    { label: "Designing a flyer, logo, or slide deck", tag: "design" }
+                ]
+            },
+            {
+                prompt: "In a group project, you naturally end up...",
+                options: [
+                    { label: "Running the meeting and keeping everyone on track", tag: "leadership" },
+                    { label: "Digging into the fine print nobody else wants to read", tag: "legal" },
+                    { label: "Figuring out how to pay for things", tag: "fundraise" },
+                    { label: "Making sure the final write-up actually reads well", tag: "write" }
+                ]
+            },
+            {
+                prompt: "Which headline would you click first?",
+                options: [
+                    { label: "\"How a Texas Bill Becomes Law\"", tag: "legal" },
+                    { label: "\"5 Data Tools Every Campaign Needs\"", tag: "tech" },
+                    { label: "\"How We Raised $50K in 30 Days\"", tag: "fundraise" },
+                    { label: "\"Inside a Winning Field Operation\"", tag: "organize" }
+                ]
+            },
+            {
+                prompt: "Your idea of a productive Saturday morning is...",
+                options: [
+                    { label: "Cold-emailing a few campaign managers", tag: "leadership" },
+                    { label: "Reading a bill or agency rule line by line", tag: "legal" },
+                    { label: "Building an automation that saves hours of manual work", tag: "tech" },
+                    { label: "Sketching out a social media content calendar", tag: "comms" }
+                ]
+            },
+            {
+                prompt: "When something feels unfair, your first instinct is to...",
+                options: [
+                    { label: "Organize the people affected by it", tag: "organize" },
+                    { label: "Write about it so more people understand", tag: "write" },
+                    { label: "Find out exactly what law or policy allows it", tag: "legal" },
+                    { label: "Follow the money behind who benefits", tag: "fundraise" }
+                ]
+            },
+            {
+                prompt: "People usually come to you for help with...",
+                options: [
+                    { label: "Spreadsheets, code, or tech troubleshooting", tag: "tech" },
+                    { label: "Making something look professional", tag: "design" },
+                    { label: "Talking them through a plan calmly", tag: "leadership" },
+                    { label: "Editing their writing", tag: "write" }
+                ]
+            },
+            {
+                prompt: "If you joined a campaign tomorrow, you'd want to be the person who...",
+                options: [
+                    { label: "Owns the voter data and dashboards", tag: "tech" },
+                    { label: "Runs volunteers and events", tag: "organize" },
+                    { label: "Handles press and messaging", tag: "comms" },
+                    { label: "Tracks the bill through committee", tag: "legal" }
+                ]
+            }
+        ];
+
+        const RESULT_INFO = {
+            tech: {
+                title: "The Tech Bridge-Builder",
+                blurb: "You think in systems. Campaigns and advocacy groups are drowning in messy data and manual work — and you're exactly the person who can fix that. This is the fastest, least-crowded path into paid political work.",
+                stepId: 4
+            },
+            organize: {
+                title: "The Grassroots Organizer",
+                blurb: "You move people, not just information. Coalitions and call campaigns live or die on someone doing the unglamorous work of coordinating people — that's you.",
+                stepId: 2
+            },
+            comms: {
+                title: "The Message Carrier",
+                blurb: "You know how to make an argument land. Reframing 'protect the kids' rhetoric into an honest conversation about money and toxicity is a messaging problem, and you're built for it.",
+                stepId: 1
+            },
+            write: {
+                title: "The Content Strategist",
+                blurb: "You turn complicated issues into something people actually read. Fact sheets, testimony drafts, and social posts all need someone who can write clearly under a deadline.",
+                stepId: 1
+            },
+            design: {
+                title: "The Visual Advocate",
+                blurb: "A flyer or graphic can travel further in a day than a paragraph travels in a week. Coalitions always need someone who can make information look as good as it is true.",
+                stepId: 6
+            },
+            legal: {
+                title: "The Policy Wonk",
+                blurb: "You actually want to read the bill text. That's rare, valuable, and exactly what's needed to track this fight through committee hearings toward the 2027 session.",
+                stepId: 7
+            },
+            fundraise: {
+                title: "The War Chest Builder",
+                blurb: "Legal defense funds and campaigns run on money, and someone has to raise it. You're comfortable asking — which is the single hardest skill in this entire roadmap to find.",
+                stepId: 5
+            },
+            leadership: {
+                title: "The Campaign Natural",
+                blurb: "You're the one people trust to run the room. Campaigns are chaotic by nature, and they promote whoever can bring order to that chaos — fast.",
+                stepId: 3
+            }
+        };
+
+        /* ------------------------------------------------------------------ */
+        /* News Ticker                                                         */
+        /* ------------------------------------------------------------------ */
+
+        function NewsTicker() {
+            const [state, setState] = useState({ status: "loading", items: [] });
+
+            useEffect(() => {
+                let cancelled = false;
+                fetch("/api/news")
+                    .then((res) => {
+                        if (!res.ok) throw new Error("bad response");
+                        return res.json();
+                    })
+                    .then((data) => {
+                        if (cancelled) return;
+                        if (!data.items || data.items.length === 0) {
+                            setState({ status: "empty", items: [] });
+                        } else {
+                            setState({ status: "ready", items: data.items, fetchedAt: data.fetchedAt });
+                        }
+                    })
+                    .catch(() => {
+                        if (!cancelled) setState({ status: "error", items: [] });
+                    });
+                return () => { cancelled = true; };
+            }, []);
+
+            if (state.status === "loading") {
+                return (
+                    <div className="w-full bg-slate-900 border-b border-slate-800 text-xs md:text-sm text-slate-500 py-2 px-4 text-center">
+                        Loading the latest hemp-policy headlines…
+                    </div>
+                );
+            }
+
+            if (state.status === "error" || state.status === "empty") {
+                return (
+                    <div className="w-full bg-slate-900 border-b border-slate-800 text-xs md:text-sm text-slate-500 py-2 px-4 text-center">
+                        Live headline feed is temporarily unavailable — check back soon.
+                    </div>
+                );
+            }
+
+            const items = [...state.items, ...state.items];
 
             return (
-                <div className="min-h-screen p-8 max-w-6xl mx-auto">
-                    <header className="mb-12 text-center md:text-left">
-                        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 mb-4">
-                            The Citizen's Blueprint
-                        </h1>
-                        <p className="text-slate-400 text-lg max-w-2xl">
-                            A step-by-step roadmap to understanding the political hypocrisy behind hemp bans, taking action, and leveraging your tech skills to get paid to make an actual difference.
-                        </p>
-                    </header>
+                <div className="marquee-wrap w-full bg-slate-900 border-b border-green-500/20 overflow-hidden whitespace-nowrap py-2">
+                    <div className="marquee-track inline-flex items-center gap-10">
+                        {items.map((item, i) => (
+                            <a
+                                key={i}
+                                href={item.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-xs md:text-sm text-slate-300 hover:text-green-400 transition-colors"
+                            >
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>
+                                <span>{item.title}</span>
+                                {item.source && <span className="text-slate-600">— {item.source}</span>}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
 
-                    <div className="flex flex-col md:flex-row gap-8">
-                        {/* Sidebar Navigation */}
-                        <div className="md:w-1/3 flex flex-col gap-4 relative">
-                            <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-slate-700 hidden md:block z-0"></div>
-                            
-                            {roadmapSteps.map((step) => (
-                                <button
-                                    key={step.id}
-                                    onClick={() => setActiveStep(step.id)}
-                                    className={`relative z-10 flex items-center gap-4 p-4 rounded-xl text-left step-transition ${
-                                        activeStep === step.id 
-                                        ? 'glass-panel border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.2)]' 
-                                        : 'hover:bg-slate-800/50 border border-transparent'
-                                    }`}
-                                >
-                                    <div className={`flex items-center justify-center w-12 h-12 rounded-full ${
-                                        activeStep === step.id ? 'bg-green-500 text-slate-900' : 'bg-slate-800 text-slate-400'
+        /* ------------------------------------------------------------------ */
+        /* Nav                                                                 */
+        /* ------------------------------------------------------------------ */
+
+        function NavBar() {
+            const links = [
+                { id: "roadmap", label: "Roadmap" },
+                { id: "assessment", label: "Find Your Role" },
+                { id: "faq", label: "FAQ" },
+                { id: "community", label: "Discussion" }
+            ];
+            const scrollTo = (id) => {
+                const el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+            };
+            return (
+                <nav className="flex flex-wrap gap-3 mb-10">
+                    {links.map((l) => (
+                        <button
+                            key={l.id}
+                            onClick={() => scrollTo(l.id)}
+                            className="px-4 py-2 rounded-full text-sm font-medium bg-slate-800/60 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700"
+                        >
+                            {l.label}
+                        </button>
+                    ))}
+                </nav>
+            );
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Roadmap                                                             */
+        /* ------------------------------------------------------------------ */
+
+        function Roadmap({ activeStep, setActiveStep }) {
+            return (
+                <div className="flex flex-col md:flex-row gap-8">
+                    <div className="md:w-1/3 flex flex-col gap-4 relative">
+                        <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-slate-700 hidden md:block z-0"></div>
+
+                        {roadmapSteps.map((step) => (
+                            <button
+                                key={step.id}
+                                onClick={() => setActiveStep(step.id)}
+                                className={`relative z-10 flex items-center gap-4 p-4 rounded-xl text-left step-transition ${
+                                    activeStep === step.id
+                                    ? 'glass-panel border-green-500/50 shadow-[0_0_15px_rgba(34,197,94,0.2)]'
+                                    : 'hover:bg-slate-800/50 border border-transparent'
+                                }`}
+                            >
+                                <div className={`flex items-center justify-center w-12 h-12 rounded-full shrink-0 ${
+                                    activeStep === step.id ? 'bg-green-500 text-slate-900' : 'bg-slate-800 text-slate-400'
+                                }`}>
+                                    {step.icon}
+                                </div>
+                                <div>
+                                    <div className={`text-xs font-semibold uppercase tracking-wider mb-1 ${
+                                        activeStep === step.id ? 'text-green-400' : 'text-slate-500'
                                     }`}>
-                                        {step.icon}
+                                        Step {step.id}: {step.category}
                                     </div>
-                                    <div>
-                                        <div className={`text-xs font-semibold uppercase tracking-wider mb-1 ${
-                                            activeStep === step.id ? 'text-green-400' : 'text-slate-500'
-                                        }`}>
-                                            Step {step.id}: {step.category}
-                                        </div>
-                                        <div className="font-semibold text-lg">{step.title}</div>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
+                                    <div className="font-semibold text-lg">{step.title}</div>
+                                </div>
+                            </button>
+                        ))}
+                    </div>
 
-                        {/* Main Content Area */}
-                        <div className="md:w-2/3">
-                            {roadmapSteps.map((step) => (
-                                <div 
-                                    key={step.id}
-                                    className={`${activeStep === step.id ? 'block' : 'hidden'} animate-[fadeIn_0.5s_ease-in-out]`}
-                                >
-                                    <div className="glass-panel p-8 rounded-2xl">
-                                        <div className="inline-block px-3 py-1 bg-slate-800 rounded-full text-green-400 text-sm font-semibold mb-6">
-                                            {step.category} Focus
+                    <div className="md:w-2/3">
+                        {roadmapSteps.map((step) => (
+                            <div
+                                key={step.id}
+                                className={`${activeStep === step.id ? 'block' : 'hidden'} animate-[fadeIn_0.5s_ease-in-out]`}
+                            >
+                                <div className="glass-panel p-8 rounded-2xl">
+                                    <div className="inline-block px-3 py-1 bg-slate-800 rounded-full text-green-400 text-sm font-semibold mb-6">
+                                        {step.category} Focus
+                                    </div>
+                                    <h2 className="text-3xl font-bold mb-2">{step.title}</h2>
+                                    <h3 className="text-xl text-slate-400 mb-8 pb-4 border-b border-slate-700">
+                                        {step.subtitle}
+                                    </h3>
+
+                                    <div className="space-y-6">
+                                        <div>
+                                            <h4 className="flex items-center gap-2 text-lg font-semibold text-blue-400 mb-2">
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                The BS Check
+                                            </h4>
+                                            <p className="text-slate-300 leading-relaxed">
+                                                {step.content}
+                                            </p>
                                         </div>
-                                        <h2 className="text-3xl font-bold mb-2">{step.title}</h2>
-                                        <h3 className="text-xl text-slate-400 mb-8 pb-4 border-b border-slate-700">
-                                            {step.subtitle}
-                                        </h3>
-                                        
-                                        <div className="space-y-6">
+
+                                        {step.keyPoints && (
                                             <div>
-                                                <h4 className="flex items-center gap-2 text-lg font-semibold text-blue-400 mb-2">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                    The BS Check
+                                                <h4 className="flex items-center gap-2 text-lg font-semibold text-purple-400 mb-3">
+                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                    What's Really Going On
                                                 </h4>
-                                                <p className="text-slate-300 leading-relaxed">
-                                                    {step.content}
-                                                </p>
+                                                <ul className="space-y-2">
+                                                    {step.keyPoints.map((point, i) => (
+                                                        <li key={i} className="flex gap-3 text-slate-300 leading-relaxed">
+                                                            <span className="text-purple-400 mt-1">•</span>
+                                                            <span>{point}</span>
+                                                        </li>
+                                                    ))}
+                                                </ul>
                                             </div>
+                                        )}
 
-                                            <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
-                                                <h4 className="flex items-center gap-2 text-lg font-semibold text-green-400 mb-2">
-                                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                                    Action Plan
-                                                </h4>
-                                                <p className="text-slate-200 leading-relaxed font-medium">
-                                                    {step.action}
-                                                </p>
-                                            </div>
+                                        <div className="bg-slate-800/50 p-6 rounded-xl border border-slate-700">
+                                            <h4 className="flex items-center gap-2 text-lg font-semibold text-green-400 mb-2">
+                                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                                Action Plan
+                                            </h4>
+                                            <p className="text-slate-200 leading-relaxed font-medium mb-4">
+                                                {step.action}
+                                            </p>
+                                            {step.nextSteps && (
+                                                <ol className="space-y-2 list-decimal list-inside">
+                                                    {step.nextSteps.map((s, i) => (
+                                                        <li key={i} className="text-slate-300 leading-relaxed">{s}</li>
+                                                    ))}
+                                                </ol>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
+            );
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Skills Assessment                                                   */
+        /* ------------------------------------------------------------------ */
+
+        function SkillsAssessment({ onJumpToStep }) {
+            const [answers, setAnswers] = useState([]);
+            const [qIndex, setQIndex] = useState(0);
+            const [result, setResult] = useState(null);
+
+            const choose = (tag) => {
+                const next = [...answers, tag];
+                setAnswers(next);
+                if (qIndex + 1 < QUIZ_QUESTIONS.length) {
+                    setQIndex(qIndex + 1);
+                } else {
+                    const tally = {};
+                    next.forEach((t) => { tally[t] = (tally[t] || 0) + 1; });
+                    const top = Object.entries(tally).sort((a, b) => b[1] - a[1])[0][0];
+                    setResult(top);
+                }
+            };
+
+            const restart = () => {
+                setAnswers([]);
+                setQIndex(0);
+                setResult(null);
+            };
+
+            if (result) {
+                const info = RESULT_INFO[result];
+                return (
+                    <div className="glass-panel p-8 rounded-2xl text-center max-w-2xl mx-auto">
+                        <div className="inline-block px-3 py-1 bg-slate-800 rounded-full text-green-400 text-sm font-semibold mb-4">
+                            Your Result
+                        </div>
+                        <h3 className="text-3xl font-bold mb-3">{info.title}</h3>
+                        <p className="text-slate-300 leading-relaxed mb-8">{info.blurb}</p>
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                            <button
+                                onClick={() => onJumpToStep(info.stepId)}
+                                className="px-6 py-3 rounded-xl bg-green-500 text-slate-900 font-semibold hover:bg-green-400 transition-colors"
+                            >
+                                See Where You Fit In the Roadmap
+                            </button>
+                            <button
+                                onClick={restart}
+                                className="px-6 py-3 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition-colors border border-slate-700"
+                            >
+                                Retake Assessment
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            const question = QUIZ_QUESTIONS[qIndex];
+
+            return (
+                <div className="glass-panel p-8 rounded-2xl max-w-2xl mx-auto">
+                    <div className="flex justify-between items-center mb-6">
+                        <span className="text-sm text-slate-500 font-semibold">
+                            Question {qIndex + 1} of {QUIZ_QUESTIONS.length}
+                        </span>
+                        <div className="w-32 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <div
+                                className="h-full bg-green-500 transition-all duration-300"
+                                style={{ width: `${((qIndex) / QUIZ_QUESTIONS.length) * 100}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                    <h3 className="text-2xl font-bold mb-6">{question.prompt}</h3>
+                    <div className="flex flex-col gap-3">
+                        {question.options.map((opt, i) => (
+                            <button
+                                key={i}
+                                onClick={() => choose(opt.tag)}
+                                className="text-left px-5 py-4 rounded-xl bg-slate-800/60 hover:bg-slate-700 border border-slate-700 hover:border-green-500/50 transition-colors text-slate-200"
+                            >
+                                {opt.label}
+                            </button>
+                        ))}
+                    </div>
+                    {qIndex > 0 && (
+                        <button
+                            onClick={() => { setQIndex(qIndex - 1); setAnswers(answers.slice(0, -1)); }}
+                            className="mt-6 text-sm text-slate-500 hover:text-slate-300"
+                        >
+                            ← Back
+                        </button>
+                    )}
+                </div>
+            );
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* FAQ                                                                 */
+        /* ------------------------------------------------------------------ */
+
+        function FaqSection() {
+            const [open, setOpen] = useState(null);
+            return (
+                <div className="max-w-3xl mx-auto flex flex-col gap-3">
+                    {faqItems.map((item, i) => (
+                        <div key={i} className="glass-panel rounded-xl overflow-hidden">
+                            <button
+                                onClick={() => setOpen(open === i ? null : i)}
+                                className="w-full text-left px-6 py-4 flex justify-between items-center gap-4"
+                            >
+                                <span className="font-semibold text-slate-200">{item.q}</span>
+                                <span className={`text-green-400 text-xl step-transition ${open === i ? 'rotate-45' : ''}`}>+</span>
+                            </button>
+                            {open === i && (
+                                <div className="px-6 pb-5 text-slate-400 leading-relaxed">
+                                    {item.a}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* Comments / Discussion                                              */
+        /* ------------------------------------------------------------------ */
+
+        function timeAgo(iso) {
+            const diff = Math.max(0, Date.now() - new Date(iso).getTime());
+            const mins = Math.floor(diff / 60000);
+            if (mins < 1) return "just now";
+            if (mins < 60) return `${mins}m ago`;
+            const hours = Math.floor(mins / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            return `${days}d ago`;
+        }
+
+        function CommentsSection() {
+            const [status, setStatus] = useState("loading");
+            const [comments, setComments] = useState([]);
+            const [name, setName] = useState("");
+            const [text, setText] = useState("");
+            const [website, setWebsite] = useState("");
+            const [submitting, setSubmitting] = useState(false);
+            const [submitError, setSubmitError] = useState(null);
+
+            const load = useCallback(() => {
+                setStatus("loading");
+                fetch("/api/comments")
+                    .then((res) => {
+                        if (!res.ok) throw new Error("bad response");
+                        return res.json();
+                    })
+                    .then((data) => {
+                        setComments(Array.isArray(data) ? data.slice().reverse() : []);
+                        setStatus("ready");
+                    })
+                    .catch(() => setStatus("error"));
+            }, []);
+
+            useEffect(() => { load(); }, [load]);
+
+            const submit = (e) => {
+                e.preventDefault();
+                if (!text.trim()) return;
+                setSubmitting(true);
+                setSubmitError(null);
+                fetch("/api/comments", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, text, website })
+                })
+                    .then((res) => {
+                        if (!res.ok) throw new Error("failed");
+                        return res.json();
+                    })
+                    .then((comment) => {
+                        setComments([comment, ...comments]);
+                        setText("");
+                    })
+                    .catch(() => setSubmitError("Couldn't post your comment. Please try again in a moment."))
+                    .finally(() => setSubmitting(false));
+            };
+
+            return (
+                <div className="max-w-3xl mx-auto">
+                    <form onSubmit={submit} className="glass-panel p-6 rounded-2xl mb-8">
+                        <h3 className="text-xl font-bold mb-4">Join the Discussion</h3>
+                        <div className="flex flex-col gap-3">
+                            <input
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="Name (optional)"
+                                maxLength={60}
+                                className="px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-green-500/50"
+                            />
+                            {/* Honeypot field, hidden from real users */}
+                            <input
+                                type="text"
+                                value={website}
+                                onChange={(e) => setWebsite(e.target.value)}
+                                tabIndex={-1}
+                                autoComplete="off"
+                                className="hidden"
+                                aria-hidden="true"
+                            />
+                            <textarea
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                placeholder="Share a thought, a lead, or a question…"
+                                maxLength={1000}
+                                rows={4}
+                                required
+                                className="px-4 py-3 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-green-500/50 resize-none"
+                            />
+                            <div className="flex justify-between items-center">
+                                <span className="text-xs text-slate-500">{text.length}/1000</span>
+                                <button
+                                    type="submit"
+                                    disabled={submitting || !text.trim()}
+                                    className="px-6 py-2.5 rounded-lg bg-green-500 text-slate-900 font-semibold hover:bg-green-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    {submitting ? "Posting…" : "Post Comment"}
+                                </button>
+                            </div>
+                            {submitError && <p className="text-red-400 text-sm">{submitError}</p>}
+                        </div>
+                    </form>
+
+                    {status === "loading" && (
+                        <p className="text-slate-500 text-center">Loading comments…</p>
+                    )}
+                    {status === "error" && (
+                        <p className="text-slate-500 text-center">Comments are unavailable right now. Please check back soon.</p>
+                    )}
+                    {status === "ready" && comments.length === 0 && (
+                        <p className="text-slate-500 text-center">No comments yet — be the first to weigh in.</p>
+                    )}
+                    {status === "ready" && comments.length > 0 && (
+                        <div className="flex flex-col gap-4">
+                            {comments.map((c) => (
+                                <div key={c.id} className="glass-panel p-5 rounded-xl">
+                                    <div className="flex justify-between items-baseline mb-2">
+                                        <span className="font-semibold text-green-400">{c.name}</span>
+                                        <span className="text-xs text-slate-500">{timeAgo(c.createdAt)}</span>
+                                    </div>
+                                    <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">{c.text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        /* ------------------------------------------------------------------ */
+        /* App                                                                 */
+        /* ------------------------------------------------------------------ */
+
+        function SectionHeading({ eyebrow, title, subtitle }) {
+            return (
+                <div className="text-center mb-10">
+                    <div className="inline-block px-3 py-1 bg-slate-800 rounded-full text-green-400 text-sm font-semibold mb-4">
+                        {eyebrow}
+                    </div>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-3">{title}</h2>
+                    {subtitle && <p className="text-slate-400 max-w-2xl mx-auto">{subtitle}</p>}
+                </div>
+            );
+        }
+
+        const App = () => {
+            const [activeStep, setActiveStep] = useState(1);
+
+            const jumpToStep = (id) => {
+                setActiveStep(id);
+                const el = document.getElementById("roadmap");
+                if (el) el.scrollIntoView({ behavior: "smooth" });
+            };
+
+            return (
+                <React.Fragment>
+                    <NewsTicker />
+                    <div className="min-h-screen p-8 max-w-6xl mx-auto">
+                        <header className="mb-8 text-center md:text-left">
+                            <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500 mb-4">
+                                The Citizen's Blueprint
+                            </h1>
+                            <p className="text-slate-400 text-lg max-w-2xl">
+                                A step-by-step roadmap to understanding the political hypocrisy behind hemp bans, taking action, finding your role, and getting paid to make an actual difference.
+                            </p>
+                        </header>
+
+                        <NavBar />
+
+                        <section id="roadmap" className="mb-24 scroll-mt-8">
+                            <SectionHeading
+                                eyebrow="The Roadmap"
+                                title="Seven Steps From Outrage to Impact"
+                                subtitle="Work through them in order, or jump to whichever one matches where you are right now."
+                            />
+                            <Roadmap activeStep={activeStep} setActiveStep={setActiveStep} />
+                        </section>
+
+                        <section id="assessment" className="mb-24 scroll-mt-8">
+                            <SectionHeading
+                                eyebrow="Find Your Role"
+                                title="What Skills Do You Already Have?"
+                                subtitle="Everyone thinks they need to become a policy expert to help. Most of the time, you just need to point your existing skills at the problem. Take the 60-second assessment to find your entry point."
+                            />
+                            <SkillsAssessment onJumpToStep={jumpToStep} />
+                        </section>
+
+                        <section id="faq" className="mb-24 scroll-mt-8">
+                            <SectionHeading
+                                eyebrow="Glossary & FAQ"
+                                title="Common Questions, Answered Straight"
+                            />
+                            <FaqSection />
+                        </section>
+
+                        <section id="community" className="mb-16 scroll-mt-8">
+                            <SectionHeading
+                                eyebrow="Community"
+                                title="Discussion"
+                                subtitle="Share a lead, a question, or what's happening in your area. Comments are public and visible to everyone."
+                            />
+                            <CommentsSection />
+                        </section>
+
+                        <footer className="text-center text-slate-600 text-sm pt-8 border-t border-slate-800">
+                            <p>Built by a citizen, for citizens. Headlines refresh daily and are pulled automatically from public news sources.</p>
+                        </footer>
+                    </div>
+                </React.Fragment>
             );
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-    <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
 </body>
 </html>
